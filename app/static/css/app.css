@@ -1,0 +1,248 @@
+body {
+    padding-top: 5rem;
+}
+
+.updateimg{
+    height: 200px;
+    width: 200px;
+}
+
+.logoig{
+    width:20px;
+    height:20px;
+}
+
+.social_footer div,.social_footer p{
+    display: inline-block;
+}
+
+.card{
+    width: 350px;
+    height: 500px;
+    border:1px solid black;
+    border-radius:  20px;
+}
+
+.inlabel{
+    font-weight: bold;
+    width: 130px;
+}
+
+.inventory_items p{
+    display:inline-block;
+} 
+
+.buttn{
+    display: inline-block;
+}
+
+.lowstock{
+    color: red;
+    font-weight: bold;
+}
+.addremove{
+    width: 50%;
+}
+
+.signup{
+    width: 40%;
+}
+
+.flashes{
+    background-color: rgb(255, 255, 136);
+    color: black;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+label{
+    font-weight: bold;
+}
+
+#image{
+    width: 80px;
+    height: 80px;
+}
+
+
+.card-text{
+    padding: 20px;
+}
+
+#cost{
+    color: rgb(155, 157, 158);
+}
+
+button{
+    border-radius: 5px;
+    border-style: none;
+    height: 40px;
+    width: 100px;
+    color:white;
+    font-size: 15px;
+    background-color: rgb(161, 161, 31);
+    margin-right: 50px;
+}
+
+.all-inventory-items{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+
+
+#update_item{
+    width: 80%;
+}
+
+.photo_field{
+    position: relative;
+    width: 100%;
+    height: 40%
+}
+
+.photo_field img{
+    width: 100%;
+    height: auto;
+}
+
+.photo_field .btn {
+    position: absolute;
+    bottom:2em;
+    right:2em;
+    /* transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%); */
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .photo_field .btn:hover {
+    background-color: black;
+  }
+
+#cart-img{
+    width: 20px;
+    height: 20px;
+}
+
+#shopping-cart{
+    width: 90%;
+}
+
+#shopping-cart th, #shopping-cart td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* .shop-checkout .shop-cart, .shop-checkout .checkout-form{
+    display: inline-block;
+}*/
+
+.shop-checkout{
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-gap: 40px;
+}
+
+
+.radio-buttons{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bank {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-gap: 20px;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid rgb(224, 178, 24);
+    background-color: rgb(247, 198, 37);
+    width:60%;
+  }
+  
+  /* Style the buttons inside the tab */
+  .tab input {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+  /* Change background color of buttons on hover */
+  .tab input:hover {
+    background-color: rgb(224, 178, 24);
+  }
+  
+  /* Create an active/current tablink class */
+  .tab input.active {
+    background-color: rgb(224, 178, 24);
+  }
+  
+  /* Style the tab content */
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid rgb(224, 178, 24);
+    border-top: none;
+    width:60%;
+  }
+
+  /* Style the close button */
+.topright {
+    float: right;
+    cursor: pointer;
+    font-size: 28px;
+  }
+  
+.topright:hover {color: red;}
+
+
+.receipt{
+    margin: auto;
+    background-color: rgb(247, 231, 178);
+    padding: 5%;
+    width: 60%;
+    justify-content: center;
+    border-radius: 30px;
+    box-shadow: 5px 10px 10px #888888;
+}
+
+.receipt h1{
+    color: black;
+    text-align: center;
+}
+
+#discount{
+    color: red;
+}
+
+.receipt table{
+    width: 100%;
+}
+
+.receipt td {
+    padding-top: 15px;
+    padding-bottom:15px;
+    border-bottom: 1px solid rgb(255, 223, 117);
+}
+
+
+/* <!-- shopping cart -- > */
+/* .number-box{
+    position: absolute;
+    top:50%;
+    left:50%;
+    tran=sform: translate(-50%f,-50%);
+}
+.input
+
+} */
