@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{%block main%}
+<div id="update_item">
+  <form action="{{url_for('update',button_name=button_name)}}" method="POST" enctype="multipart/form-data">
+  {{ form.csrf_token }}
+  <h1>Update Item</h1>
+    <div>
+      <img src="{{url_for('get_image', filename=item.image)}}" alt={{item.name}} class="updateimg">
+    </div>
+    <div class="form-group">
+      <p>{{form.photo_update.label}} (Use only when picture needs to be updated)</p> 
+      {{form.photo_update(class='form-control')}}
+    </div>
+    <div class="form-group">
+      {{form.name.label}}
+      {{form.name(class='form-control')}}
+    </div>
+    <div class="form-group">
+      {{form.description.label}}
+      {{form.description(class='form-control')}}
+    </div>
+    <div class="form-group">
+      {{form.stocklevel.label}}
+      {{form.stocklevel(class='form-control')}}
+    </div>
+    <div class="form-group">
+      {{form.cost.label}}
+      {{form.cost(class='form-control')}}
+    </div>
+    <button type="submit" name="submit" class="btn btn-primary">Update</button>
+  </form>
+{%endblock%}
+</html>

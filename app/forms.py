@@ -8,7 +8,10 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
 
+class UpdateQuant(FlaskForm):
+    update_quantity = StringField('Update', validators=[InputRequired()])
 
+    
 class InventoryForm(FlaskForm):
     photo = FileField('Photo', validators=[
         FileRequired(),

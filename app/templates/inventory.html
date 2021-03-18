@@ -1,0 +1,43 @@
+{%extends 'base.html'%}
+{%block main%}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Cost</th>
+      <th scope="col">Stock</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for item in items%}
+    <tr>
+      <td><img id="image" src="{{url_for('get_image', filename=item.image)}}"></td>
+      <td>{{item.name}}</td>
+      <td>{{item.description}}</td>
+      <td>${{item.cost}}.00</td>
+      <td>{{item.stocklevel}}
+        {%if item.stocklevel <= 10 %}
+        <p class="lowstock">Stock levels are low</p>
+        {%endif%}
+      </td>
+      <td>
+        <a href="{{url_for('update', button_name=item.name)}}"><input type="button" value="EDIT" class="btn btn-warning"></a> 
+        <a href="{{url_for('remove', button_name=item.name)}}"><input type="button" value="DELETE" class="btn btn-danger"></a> 
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+
+<br/>
+<br/>
+<form action="{{url_for('add_item')}}" method="GET">
+  <button type="submit" name="submit" class= "btn btn-primary btn-block btn-warning">Add Item</button>
+</form>
+{%endblock%}
+</html>

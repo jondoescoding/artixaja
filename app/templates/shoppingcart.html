@@ -1,0 +1,242 @@
+{%extends 'base.html'%}
+
+{%block main%}
+<div class="shop-checkout">
+  <div class="shop-cart">
+    <h1>Shopping Cart</h1>
+    <p>Review and Modify your cart here</p>
+    {%if cart|length %}
+    <table id="shopping-cart">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Item Name</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Cost</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for item in cart%}
+        <tr>
+          <td><img id="image" src="{{url_for('get_image', filename=item[0].image)}}"></td>
+          <td>{{item[0].name}}</td>
+          <td>{{item[1]}} 
+            <form action="{{url_for('update_quant', itemid=item[0].id)}}" method="POST">
+              {{form2.csrf_token}}
+              {{form2.update_quantity}}
+              <button class="btn btn-warning">Update Qnt</button>
+              {#<a href="{{url_for('update_quant', itemid=item[0].id, quantity=0)}}">Update</a>#}
+            </form>
+          </td>
+            
+            
+          <td>${{item[2]}}.00</td>
+          <td><a href="{{url_for('remove_cart', itemid=item[0].id)}}">Remove</a></td>
+        </tr>
+        {%endfor%}
+        <tr>
+          <td>Subtotal</td>
+          <td>${{total}}.00</td>
+        </tr>
+      </tbody>
+    </table>
+    {%else%}
+      <hr/>
+      <p>No items in cart</p>
+      <hr/>
+    {%endif%}
+    <a href="{{url_for('display_catalogue')}}"><input type="submit" class="btn btn-block btn-warning" value="Continue Shopping"></a>
+  </div>
+  <div class="checkout-form">
+    <h1>Checkout</h1>
+    <form action="{{url_for('checkout')}}" method="POST">
+      {{form.csrf_token}}
+      <fieldset class="form-group">
+        {{form.address.label}}
+        {{form.address(class='form-control', placeholder='Street Address, apartment, suite, floor, etc')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.parish.label}}
+        {{form.parish(class='form-control')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.drop_off.label}}
+        {{form.drop_off(class='form-control')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.discountCode.label}}
+        {{form.discountCode(class='form-control')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.delivery_instructions.label}}
+        {{form.delivery_instructions(class='form-control')}}
+      </fieldset>
+      <a href="#">See Delivery Costs</a>
+      <fieldset class="bank-radio-buttons">
+        {{form.payment_methods.label}}
+        {{form.payment_methods(class='form-check-label radio-buttons')}}
+      </fieldset>
+      <p>All bank payments must be made before orders can be processed</p>
+      <div class="bank-info">
+        <p style="font-weight: 700;">View Bank Information</p>
+        <div class="tab">
+          <input type="button" class="tablinks" onclick="bankDets(event, 'NCB')" value="NCB"></input>
+          <input type="button" class="tablinks" onclick="bankDets(event, 'Scotiabank')" value="Scotiabank"></input>
+        </div>
+
+        <div id="NCB" class="tabcontent">
+          <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+          <br>
+          <p>Account Name: A-jon Josingh</p>
+          <p>Account #: 1234567</p>
+          <p>Branch: UWI 2171</p>
+          <p>Account Type: Education</p>
+        </div>
+
+        <div id="Scotiabank" class="tabcontent">
+          <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+          <br>
+          <p>Account Name: A-jon Josingh</p>
+          <p>Account #: 1234567</p>
+          <p>Branch: UWI COMP 2171</p>
+          <p>Account Type: Education</p> 
+        </div>
+      </div>
+      <br>
+      <button type="submit" class="btn btn-warning">Checkout</button>
+    </form>
+    <br>
+  </div>
+ 
+</div>
+
+<script>
+  function bankDets(evt, bank) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(bank).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+{#<div>
+    {%for item in cart%}
+      <div>
+        <img src="{{url_for('get_image', filename=item[0].image)}}">
+        <p>{{item[0].name}}</p>
+        <p>{{item[1]}}</p>
+        <label for="username"></label>
+        <input type="text" id="username" name="username" value="{{item[1]}}">
+        <p>{{item[2]}}</p>
+        <a href="{{url_for('update_quant', itemid=item[0].id, quantity=item[1])}}">Update</a>
+        <a href="{{url_for('remove_cart', itemid=item[0].id)}}">Remove</a>
+      </div>
+    {%endfor%}
+    <div>
+      <p>Total</p>
+      <p>${{total}}.00</p>
+    </div>
+  </div>#} 
+
+
+  {#<!--Main layout-->
+    <div class="container wow fadeIn">
+
+      <!-- Heading -->
+      <h2 class="my-5 h2 text-center">Shopping Cart</h2>
+
+
+      <!--Grid row-->
+      <div class="row">
+
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+            <div class="col-md-4 mb-4">
+
+                <!-- Heading -->
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-muted">Your cart</span>
+                  <span class="badge badge-secondary badge-pill">3</span>
+                </h4>
+      
+                <!-- Cart -->
+                <ul class="list-group mb-3 z-depth-1">
+                  <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                      <img src="{{url_for('get_image', filename=item.image)}}" alt=item.name>
+                      <h6 class="my-0">Product name</h6>
+                      <small class="description-text">Brief description</small>
+                    </div>
+                    <span class="cost-text">$12</span>
+                  </li>
+                  
+                  <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (JMD)</span>
+                    <strong>$20</strong>
+                  </li>
+                  <div class= "number-box"> 
+                      <input type="number" value="1">
+                       
+
+                  </div>
+                </ul>
+                <!-- Cart -->
+      
+               
+      
+              </div>
+
+          <!--Card-->
+          <div class="card">
+
+            <!--Card content-->
+            <form class="card-body">
+
+              <!--Grid row-->
+              <div class="row">
+
+                <!--Grid column-->
+                <div class="col-md-6 mb-2">
+
+        
+              <hr class="mb-4">
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+
+            </form>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+       
+
+      </div>
+      <!--Grid row-->
+
+    </div>
+  <!--Main layout-->#}
+
+  
+{%endblock%}
+</html>
+

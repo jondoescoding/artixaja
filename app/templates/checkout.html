@@ -1,0 +1,50 @@
+{%extends 'base.html'%}
+
+{%block main%}
+<div class="receipt">
+    <h1>Artixaja</h1>
+    <p>Name: {{checkout_items[0][0]}} {{checkout_items[0][1]}}</p>
+    {%if checkout_items[1]|length%}
+        <p>Address: {{checkout_items[1]}}, {{checkout_items[2]}}</p>
+    {%endif%}
+    <p>Drop Off Location: {{checkout_items[3]}}</p>
+    <p>Payment Method: {{checkout_items[5]}}</p>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Cost</th>
+              </tr>
+        </thead>
+        <tbody>
+            {%for item in cart%}
+            <tr>
+                <td>{{item[1]}} x {{item[0].name}}</td>
+                <td>${{item[2]}}.00</td>
+            </tr>    
+            {%endfor%}
+        </tbody>
+    </table>
+    <br>
+    <p>Subtotal: ${{session['total']}}.00</p>
+    <p id="discount">Discount: - {{checkout_items[7]}}0<p>
+    <p>GCT: ${{checkout_items[6]}}0</p>
+    <p>Delivery Fee: {{checkout_items[9]}}</p>
+    <p>Total: ${{checkout_items[8]+checkout_items[9]}}0</p>
+    {%if checkout_items[4]|length%}
+    <p>Delivery Instructions: {{checkout_items[4]}}</p>
+    {%endif%}
+    {%if checkout_items[10] == 1%}
+        <p>Your package will be delivered within 2 - 3 days</p>
+    {%else%}
+        <p>Your package will be delivered within 4 - 5 days by ZIP Mail at your P.O. box</p>
+    {%endif%}
+    
+    <p style="font-weight: 800;">Order Tracking Number: *some randomly generated 8 digit number*</p>
+    <p style="text-align:center;">Thank you for shopping with us</p>
+</div>
+{%endblock%}
+</html>
+
+
