@@ -65,7 +65,6 @@ def signup():
             person = Person(request.form['firstname'], request.form['lastname'], request.form['phoneNumber'],
             request.form['username'], request.form['password'], request.form['email'])
             user = signup.addPerson(person)
-            login_user(user)
             flash('Welcome to our website')
             return redirect(url_for('login'))
     return render_template('signup.html', form=form)
