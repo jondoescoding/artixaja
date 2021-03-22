@@ -1,0 +1,29 @@
+{%extends 'base.html'%}
+{%block main%}
+<h1>Track Your Order</h1>
+    <form action="{{url_for('track_order')}}"method="POST">
+        <input type="text" name="trackingNumber" placeholder="Enter Tracking Number" required>
+        <button type=submit>Enter</button>
+    </form>
+    {% if orderStatus != ''%}
+        {%if orderStatus == False%}
+            <p>Cannot Find Order. Try Again</p>
+        {%else%}
+            {%if orderStatus==status.CLOSED.value%}
+                <p>Your order has been closed</p>
+            {%elif orderStatus==status.CANCELLED.value%}
+                <p>Your order has been cancelled</p>
+            {%else%}
+                <p>{{orderStatus}}</p>
+            {%endif%}
+        {%endif%}
+        
+    {%endif%}
+
+
+{%endblock%}
+
+<script>
+    // javascript to do the damn ting
+</script>
+</html>

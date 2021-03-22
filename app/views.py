@@ -13,16 +13,22 @@ from app.models import User, Inventory
 from app.authenticate_user import Autheticate_User
 from .manageinventory import ManageInventory
 from .shoppingcart import Shoppingcart
+from .order_status import PaymentStatus, OrderStatus
 from app.signup import SignUp
 from app.person import Person
+from app.orders import Order
 from app.catalogue import DisplayCatalogue
 from app.item import Item
 from app.shoppingcart import Shoppingcart
 from werkzeug.security import check_password_hash 
 from werkzeug.utils import secure_filename
+from app.orders import Order
 
 manageinventory = ManageInventory()
 shopCart = Shoppingcart()
+order = Order()
+authUser = Autheticate_User()
+
 
 @app.route('/')
 def home():
@@ -38,7 +44,6 @@ def about():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    authUser = Autheticate_User()
     form = LoginForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -46,6 +51,7 @@ def login():
             password = request.form['password']
             authorized = authUser.AuthUser(username, password,form)
             if authorized:
+                session['ShoppingCart'] = []
                 return redirect(url_for('home'))
             flash("Incorrect Credentials")
             return render_template("login.html", form=form)
@@ -61,7 +67,7 @@ def signup():
             user = signup.addPerson(person)
             login_user(user)
             flash('Welcome to our website')
-            return redirect(url_for('home'))
+            return redirect(url_for('login'))
     return render_template('signup.html', form=form)
 
 @app.route('/update/<button_name>', methods=["GET", "POST"])
@@ -74,19 +80,22 @@ def update(button_name):
     form.description.data=item.description
     form.cost.data=item.cost
     form.stocklevel.data=item.stocklevel
-    if request.method=="POST" and form.validate_on_submit():
-        if form.photo_update.data is not None:
-            image = form.photo_update.data
-            filename = secure_filename(image.filename)
-            upload_image(image,filename)
-            original = item.image
-            manageinventory.removeImage(original)
-        else:
-            filename=item.image
-        item = manageinventory.updateItem(item, filename, request.form['name'],request.form['description'],request.form['cost'],request.form['stocklevel'])
-        if item is not None:
-            flash("Item Updated succesfully")
-            return redirect(url_for('display_inventory'))
+    if request.method=="POST":
+        if form.stocklevel.data == 0:
+            form.stocklevel.data=1
+        if form.validate_on_submit():
+            if form.photo_update.data is not None:
+                image = form.photo_update.data
+                filename = secure_filename(image.filename)
+                upload_image(image,filename)
+                original = item.image
+                manageinventory.removeImage(original)
+            else:
+                filename=item.image
+            item = manageinventory.updateItem(item, filename, request.form['name'],request.form['description'],request.form['cost'],request.form['stocklevel'])
+            if item is not None:
+                flash("Item Updated succesfully")
+                return redirect(url_for('display_inventory'))
     return render_template("update.html", form=form, item=item, button_name=itemname)
 
 @app.route('/remove/<button_name>', methods=["GET", "POST"])
@@ -158,10 +167,6 @@ def remove_cart(itemid):
     flash("Item Removed")
     return redirect(url_for('shoppingcart'))
 
-@app.route('/sumn')
-def sumn():
-    return render_template('sumn.html')
-
 @app.route('/shoppingcart/update-quantity/<itemid>', methods=["POST","GET"])
 def update_quant(itemid):
     form2=UpdateQuant()
@@ -214,10 +219,14 @@ def checkout():
             gct,ignore,total = shopCart.checkout(0)
             discount=0.0
         name = shopCart.getName()
+        subtotal = session['total']
+        total += fee
         cart,ignore=shopCart.display_cart()
-        checkout_items = [name,address,parish,drop_off,delivery_instructions,payment_methods,gct,discount,total,fee,message]
+        trackingNumber = shopCart.trackingNumber()
+        order.addOrder(address,parish,drop_off,delivery_instructions,payment_methods,gct,subtotal,discount, discountCode,total,fee,trackingNumber)
+        checkout_items = [address,parish,drop_off,delivery_instructions,payment_methods,gct,subtotal,discount,total,fee,message,trackingNumber]
         session['ShoppingCart'] = []
-        return render_template('checkout.html', checkout_items=checkout_items, cart=cart)
+        return render_template('checkout.html', checkout_items=checkout_items, cart=cart, name=name)
     return redirect(url_for('shoppingcart'))
 
 
@@ -225,10 +234,41 @@ def checkout():
 def dashboard():
     pass
 
-@app.route('/orders')
+@app.route('/orders', methods=["POST","GET"])
 def orders():
-    #this displays the orders made by various customers
-    pass
+    if request.method == "POST":
+        orderStatus = request.form.get('order_stat')
+        if orderStatus == 'NoFilter':
+            orders = order.getOrders()
+        else:
+            orders = order.filterByStatus(orderStatus)
+        return render_template('orders.html', orders=orders, orderStatus=OrderStatus, selectedStatus=orderStatus)
+    orders=order.getOrders()
+    return render_template('orders.html', orders=orders, orderStatus=OrderStatus, selectedStatus="NoFilter")
+
+@app.route('/orders/<orderid>', methods=["POST", "GET"])
+def get_order(orderid):
+    one_order = order.getOrder(orderid)
+    user = authUser.findUser(one_order.username)
+    cart = shopCart.display_user_cart(one_order.cart)
+    return render_template('single_order.html', order=one_order, cart=cart, user=user, orderStatus=OrderStatus,paymentStatus=PaymentStatus)
+
+@app.route('/order/update_status/<id>', methods=["POST"])
+def update_status(id):
+    order_status = request.form.get('order_stat')
+    payment_status = request.form.get('payment_stat')
+    order.changeOrderStatus(id, order_status)
+    order.changePaymentStatus(id, payment_status)
+    return redirect(url_for('get_order',orderid=id))
+
+@app.route('/order/track-order',methods=["POST","GET"])
+def track_order():
+    if request.method=="POST":
+        trackingNumber = request.form.get('trackingNumber')
+        orderStatus = order.trackOrder(trackingNumber)
+        return render_template('track_order.html', orderStatus=orderStatus, status=OrderStatus)
+    return render_template('track_order.html',orderStatus='')
+
 
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session
