@@ -298,6 +298,19 @@ button{
     border: 1px solid var(--warning);
     padding: 10px; 
 }
+
+
+.updateButton {
+    margin-top: 20px;
+    width: 60%;
+    position:relative; left:90px; top:-55px; 
+}
+
+.updateBar {
+    margin-top: 20px;
+    width: 50%;
+}
+
 /* 
 .UpdateQty button{
     width: 20%;
