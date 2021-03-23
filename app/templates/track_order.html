@@ -2,89 +2,52 @@
 {%block main%}
 <h1>Track Your Order</h1>
     <form action="{{url_for('track_order')}}"method="POST">
-        <input type="text" name="trackingNumber" placeholder="Enter Tracking Number" required>
-        <button type=submit>Enter</button>
+        <div class="input-group mb-3 track-button-input">
+            <input type="text" class="form-control" name="trackingNumber" placeholder="Enter Tracking Number" required>
+            <div class="input-group-prepend">
+                <button type="submit" class="btn btn-outline-warning">Enter</button>
+            </div>
+        </div>        
     </form>
     {% if orderStatus != ''%}
         {%if orderStatus == False%}
             <p>Cannot Find Order. Try Again</p>
         {%else%}
-            {%if orderStatus==status.CLOSED.value%}
-                <p>Your order has been closed</p>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 100%;">
-                                    <div class="progress-value">Your Order Has Been Closed</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {%elif orderStatus==status.CANCELLED.value%}
-                <p>Your order has been cancelled</p>
-            
-            {%elif orderStatus == status.PACKAGED.value%}
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 75%;">
-                                    <div class="progress-value">Your Order Has Been Packaged</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            {%elif orderStatus == status.PROCESSING.value%}
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 50%">
-                                    <div class="progress-value">Processing Order</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {%elif orderStatus == status.DELIVERED.value%}
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 100%;">
-                                    <div class="progress-value">Your Order Has Delivered</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {%elif orderStatus == status.ORDER_PLACED.value%}
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="progress">
+            <div class="container prog-bar">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="progress">
+                            {%if orderStatus == status.ORDER_PLACED.value%}
                                 <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 25%;">
                                     <div class="progress-value">Order Has Been Placed</div>
                                 </div>
-                            </div>
+                            {%elif orderStatus == status.PROCESSING.value%} 
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 50%">
+                                    <div class="progress-value">Processing Order</div>
+                                </div>
+                            {%elif orderStatus == status.PACKAGED.value%}
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 75%;">
+                                    <div class="progress-value">Your Order Has Been Packaged</div>
+                                </div>
+                            {%elif orderStatus == status.DELIVERED.value%}
+                                <div class="progress-bar progress-bar-info progress-bar-striped bg-success" style="width: 100%;">
+                                    <div class="progress-value">Your Order Has Been Delivered</div>
+                                </div>
+                            {%elif orderStatus==status.CLOSED.value%}
+                                <div class="progress-bar progress-bar-info progress-bar-striped bg-danger" style="width: 100%;">
+                                    <div class="progress-value">Your Order Has Been Closed</div>
+                                </div>
+                            {%else%}
+                            <div class="progress-bar progress-bar-info progress-bar-striped bg-danger" style="width: 5%;">
+                                <div class="progress-value">Your order has been cancelled</div>
+                            </div>  
+                            {%endif%}
                         </div>
                     </div>
-                </div>
-            
-            {%else%}
-                <p>LMAO</p>
-            
-            {%endif%}
+                </div> 
+            </div>
         {%endif%}
-        
     {%endif%}
-
-
-
 {%endblock%}
 
 </html>

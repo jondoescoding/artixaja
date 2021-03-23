@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 {% block main %}
     <form action="{{url_for('orders')}}" method="POST">
-        <select name="order_stat">
+        <select name="order_stat" class="form-control orders-select">
             <option value="NoFilter" {% if selectedStatus=="NoFilter" %} selected="selected"{% endif %}>None</option>
             <option value="{{orderStatus.ORDER_PLACED.value}}" {% if selectedStatus==orderStatus.ORDER_PLACED.value %} selected="selected"{% endif %}>Order Placed</option>
             <option value="{{orderStatus.PROCESSING.value}}" {% if selectedStatus==orderStatus.PROCESSING.value %} selected="selected"{% endif %}>Processing</option>
@@ -10,20 +10,25 @@
             <option value="{{orderStatus.CLOSED.value}}" {% if selectedStatus==orderStatus.CLOSED.value %} selected="selected"{% endif %} >Closed</option>
             <option value="{{orderStatus.CANCELLED.value}}" {% if selectedStatus==orderStatus.CANCELLED.value %} selected="selected"{% endif %}>Cancelled</option>
         </select>
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn-warning">Filter</button>
     </form>    
     
+    <br/>
+
     <div id="orders">
         {%if orders == False%}
             <p>No records found</p>
         {%else%}
             {%for order in orders%}
-                <div>
-                    <p>Order #: {{order.orderNumber}}</p>
-                    <p>User: {{order.username}}</p>
-                    <p>Order Time: {{order.currentTime.strftime("%B %d, %Y %H:%M:%S")}}</p>
-                    <p>Order Status: {{order.order_status}}</p>
-                    <a href="{{url_for('get_order', orderid=order.orderNumber)}}"><input type="submit" class="btn btn-warning" value="View Order"></a>
+                <div class="order-div">
+                    <div class="order-div-info">
+                        <p>Order #: {{order.orderNumber}}</p>
+                        <p>User: {{order.username}}</p>
+                        <p>Order Time: {{order.currentTime.strftime("%B %d, %Y %H:%M:%S")}}</p>
+                        <p>Order Status: {{order.order_status}}</p>
+                    </div>
+                    <br>
+                    <a href="{{url_for('get_order', orderid=order.orderNumber)}}" class="view-order-btn"><button type="submit">View Order</button></a>
                 </div>
             {%endfor%}
         {%endif%}
