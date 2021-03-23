@@ -302,11 +302,19 @@ button{
 
 .updateButton {
     margin-top: 20px;
-    width: 60%;
-    position:relative; left:90px; top:-55px; 
+    width: 100%;
+    /* position:relative; left:90px; top:-55px;  */
 }
 
 .updateBar {
     margin-top: 20px;
     width: 50%;
+}
+
+.UpdateQtyForm{
+    padding: 10px;
+}
+
+.itemQty{
+    padding: 10px;
 }
