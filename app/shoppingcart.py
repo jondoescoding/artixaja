@@ -2,6 +2,7 @@ from flask import session, redirect, url_for, flash
 from app import app,db
 from .item import Item
 from app.models import Inventory,User
+from random import randint
 
 class Shoppingcart():
     
@@ -38,6 +39,14 @@ class Shoppingcart():
                 cart.append(cart_item)
             return cart,total
 
+    def display_user_cart(self, cart):
+        user_cart = []
+        for i in cart:
+            item = self.get_item(i[0]).name
+            cart_item = [item, i[1]]
+            user_cart.append(cart_item)
+        return user_cart
+
 
     def get_item(self,id):
         return db.session.query(Inventory).filter(Inventory.id == id).first()
@@ -51,9 +60,14 @@ class Shoppingcart():
         disc_price = discount * int(session['total'])
         gct = 0.15 * int(session['total'])
         total = (int(session['total']) + gct) - disc_price
+        self.updateStocklevel()
         return gct, disc_price, total
 
-
+    def updateStocklevel(self):
+        for x in session['ShoppingCart']:
+            item = self.get_item(x[0])
+            item.stocklevel -= int(x[1])
+            db.session.commit()
 
     def validateDiscountCode(self,discountCode):
         discCodes = [["DB7ECQT",0.25], ["E1T4DAH",0.5],["RDWGJ1W",0.1]]
@@ -63,8 +77,8 @@ class Shoppingcart():
         return False
 
     def getName(self):
-        username = session['name']
-        name = db.session.query(User).filter(User.first_name == username).first()
+        f_name = session['name']
+        name = db.session.query(User).filter(User.first_name == f_name).first()
         return [name.first_name, name.last_name]
 
 
@@ -76,3 +90,10 @@ class Shoppingcart():
         fee = [x[1] for x in delivery_fee if drop_off == x[0]]
         deliv_message = [x[1] for x in message if drop_off == x[0]]
         return fee[0], deliv_message[0]
+
+    def trackingNumber(self):
+        n=8
+        range_start = 10**(n-1)
+        range_end = (10**n)-1
+        ranNum = randint(range_start, range_end)
+        return ranNum
