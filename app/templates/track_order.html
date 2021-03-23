@@ -11,14 +11,78 @@
         {%else%}
             {%if orderStatus==status.CLOSED.value%}
                 <p>Your order has been closed</p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 100%;">
+                                    <div class="progress-value">Your Order Has Been Closed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {%elif orderStatus==status.CANCELLED.value%}
                 <p>Your order has been cancelled</p>
+            
+            {%elif orderStatus == status.PACKAGED.value%}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 75%;">
+                                    <div class="progress-value">Your Order Has Been Packaged</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {%elif orderStatus == status.PROCESSING.value%}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 50%">
+                                    <div class="progress-value">Processing Order</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {%elif orderStatus == status.DELIVERED.value%}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 100%;">
+                                    <div class="progress-value">Your Order Has Delivered</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {%elif orderStatus == status.ORDER_PLACED.value%}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 25%;">
+                                    <div class="progress-value">Order Has Been Placed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
             {%else%}
-                <p>{{orderStatus}}</p>
+                <p>LMAO</p>
+            
             {%endif%}
         {%endif%}
         
     {%endif%}
+
 
 
 {%endblock%}
