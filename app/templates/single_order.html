@@ -6,6 +6,7 @@
             <p>Order Number: {{order.orderNumber}}</p>
             <p>Customer: {{user.first_name}} {{user.last_name}}</p>
             <p>Phone Number: {{user.phone_number}}</p>
+            <p>Email: {{user.email}}</p>
             <p>Order Date and Time: {{order.currentTime.strftime("%B %d, %Y %H:%M:%S")}}</p>
             <p>Tracking Number: {{order.trackingNumber}}</p>
             {%if order.address|length%}

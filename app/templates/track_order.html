@@ -16,6 +16,9 @@
             <div class="container prog-bar">
                 <div class="row">
                     <div class="col-md-6">
+                        {%if predicted_delivery_date != False%}
+                            <p>Your order will be delivered by: {{predicted_delivery_date.strftime("%B %d, %Y")}}</p>
+                        {%endif%}
                         <div class="progress">
                             {%if orderStatus == status.ORDER_PLACED.value%}
                                 <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 25%;">
@@ -29,6 +32,7 @@
                                 <div class="progress-bar progress-bar-info progress-bar-striped" style="width: 75%;">
                                     <div class="progress-value">Your Order Has Been Packaged</div>
                                 </div>
+                                
                             {%elif orderStatus == status.DELIVERED.value%}
                                 <div class="progress-bar progress-bar-info progress-bar-striped bg-success" style="width: 100%;">
                                     <div class="progress-value">Your Order Has Been Delivered</div>

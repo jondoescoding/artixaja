@@ -22,6 +22,7 @@ from app.item import Item
 from app.shoppingcart import Shoppingcart
 from werkzeug.security import check_password_hash 
 from werkzeug.utils import secure_filename
+from datetime import datetime
 from app.orders import Order
 
 manageinventory = ManageInventory()
@@ -222,10 +223,11 @@ def checkout():
         total += fee
         cart,ignore=shopCart.display_cart()
         trackingNumber = shopCart.trackingNumber()
-        order.addOrder(address,parish,drop_off,delivery_instructions,payment_methods,gct,subtotal,discount, discountCode,total,fee,trackingNumber)
+        order.addOrder(address,parish,drop_off,delivery_instructions,payment_methods,gct,subtotal,discount, discountCode,total,fee,trackingNumber,message)
         checkout_items = [address,parish,drop_off,delivery_instructions,payment_methods,gct,subtotal,discount,total,fee,message,trackingNumber]
         session['ShoppingCart'] = []
-        return render_template('checkout.html', checkout_items=checkout_items, cart=cart, name=name)
+        date= datetime.now()
+        return render_template('checkout.html', checkout_items=checkout_items, cart=cart, name=name, date=date)
     return redirect(url_for('shoppingcart'))
 
 
@@ -264,8 +266,8 @@ def update_status(id):
 def track_order():
     if request.method=="POST":
         trackingNumber = request.form.get('trackingNumber')
-        orderStatus = order.trackOrder(trackingNumber)
-        return render_template('track_order.html', orderStatus=orderStatus, status=OrderStatus)
+        orderStatus,predicted_delivery_date = order.trackOrder(trackingNumber)
+        return render_template('track_order.html', orderStatus=orderStatus, status=OrderStatus, predicted_delivery_date=predicted_delivery_date)
     return render_template('track_order.html',orderStatus='')
 
 

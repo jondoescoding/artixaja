@@ -71,6 +71,7 @@ class Orders(db.Model):
     orderNumber= db.Column(db.Integer, primary_key=True)
     currentTime = db.Column(db.DateTime, nullable=False,
         default=datetime.now)
+    predicted_delivery_date = db.Column(db.DateTime)
     trackingNumber = db.Column(db.Integer, unique=True)
     username = db.Column(db.String)
     address = db.Column(db.String)
@@ -88,7 +89,8 @@ class Orders(db.Model):
     payment_method = db.Column(db.String)
     payment_status = db.Column(db.String, default=PaymentStatus.NOT_PAID.value)
 
-    def __init__(self,trackingNumber,username,address,parish,location,gct,subtotal,discount, discount_code,total,delivery_fee,cart,instructions,payment_method):
+    def __init__(self,predicted_delivery_date,trackingNumber,username,address,parish,location,gct,subtotal,discount, discount_code,total,delivery_fee,cart,instructions,payment_method):
+        self.predicted_delivery_date = predicted_delivery_date
         self.trackingNumber = trackingNumber
         self.username = username
         self.address = address

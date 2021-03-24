@@ -3,6 +3,7 @@
 {%block main%}
 <div class="receipt">
     <h1>Artixaja</h1>
+    <p>{{date.strftime("%B %d, %Y %H:%M")}}</p>
     <p>Name: {{name[0]}} {{name[1]}}</p>
     {%if checkout_items[0]|length%}
         <p>Address: {{checkout_items[0]}}, {{checkout_items[1]}}</p>
