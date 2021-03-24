@@ -5,6 +5,7 @@ from app.models import Orders, User
 from app.person import Person
 from app.order_status import OrderStatus
 from datetime import datetime, timedelta 
+from sqlalchemy import asc
 
 class Order():
 
@@ -18,7 +19,7 @@ class Order():
         db.session.commit()
 
     def getOrders(self):
-        return db.session.query(Orders).all()
+        return db.session.query(Orders).order_by(asc(Orders.orderNumber))
 
     def getOrder(self, id):
         return db.session.query(Orders).filter(Orders.orderNumber == id).first()
@@ -51,7 +52,7 @@ class Order():
         return date
 
     def filterByStatus(self,orderStatus):
-        orders = db.session.query(Orders).filter(Orders.order_status == orderStatus).all()
+        orders = db.session.query(Orders).filter(Orders.order_status == orderStatus).order_by(asc(Orders.orderNumber))
         if orders:
             return orders
         else:
