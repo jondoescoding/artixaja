@@ -1,0 +1,52 @@
+{%extends 'base.html'%}
+{%block main%}
+<h1 style="text-align: center;">Expenses</h1>
+<br>
+<div class="expense_info">
+    {%if expenses|length%}
+    <table id="shopping-cart">
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Category</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for expense in expenses%}
+        <tr>
+            <td>{{expense.date}}</td>
+            <td>{{expense.category}}</td>
+            <td>{{expense.name}}</td>
+            <td>{{expense.description}}</td>
+            <td>{%if expense.amount<0 %}{{"-${:,.2f}".format(expense.amount|abs)}} {%else%} {{"${:,.2f}".format(expense.amount)}} {%endif%}</td>
+            <td><a href="{{url_for('updateExpense',id=expense.id)}}" class="update">Update</a>
+                <a href="{{url_for('removeExpense',id=expense.id)}}" class="remove">Remove</a>
+            </td>
+        </tr>
+        {%endfor%}
+        <tr>
+            <td>Total</td>
+            <td colspan="6">{%if (total)<0 %}{{"-${:,.2f}".format(total|abs)}} {%else%} {{"${:,.2f}".format(total)}} {%endif%}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    {%else%}
+        <hr>
+        <p>No expenses to display</p>
+    {%endif%}
+    
+    
+</div>
+<br>
+<div class='expense-btn'>
+    <a href="{{url_for('addExpense')}}"><button class="btn btn-block btn-warning">Add Expense</button></a>
+    <a href="{{url_for('addCategory')}}"><button class="btn btn-block btn-warning">Add/View Categories</button></a>    
+</div>
+{%endblock%}
+</html>

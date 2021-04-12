@@ -1,0 +1,34 @@
+{%extends 'base.html'%}
+{%block  main%}
+
+    <form action="{{url_for('updateExpense',id=expense.id)}}" method="POST">
+        {{form.csrf_token}}
+        <fieldset class='form-group'>
+            {{form.date_range.label}}
+            {{form.date_range(class='form-control',type='date',value=expense.date,min=year_start,max=today)}}
+        </fieldset>
+        <fieldset class='form-group'>
+            {{form.name.label}}
+            {{form.name(class='form-control')}}
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="category">Category</label>
+            <select name="category" class="browser-default custom-select" id="categories">
+                {%for category in categories%}
+                    <option value="{{category.name}}" {% if expense.category==category.name %} selected="selected"{% endif %}>{{category.name}}</option> 
+                {%endfor%}
+            </select>
+        </fieldset>
+        <fieldset class="form-group">
+            {{form.description.label}}
+            {{form.description (class='form-control')}}
+        </fieldset>
+        <fieldset class="form-group">
+            {{form.amount.label}}
+            {{form.amount(class='form-control')}}
+        </fieldset>
+        <button type='submit' class='btn btn-warning' >Update</button>
+    </form>
+    
+{%endblock%}
+</html>

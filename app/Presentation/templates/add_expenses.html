@@ -1,0 +1,37 @@
+{%extends 'base.html'%}
+{%block  main%}
+    <h1 style='text-align: center;'>Add Expense</h1>
+    <form action="{{url_for('addExpense')}}" method="POST">
+        {{form.csrf_token}}
+        <fieldset class='form-group'>
+            {{form.date_range.label}}
+            {{form.date_range(class='form-control',type='date',value=today,min=year_start,max=today)}}
+        </fieldset>
+        <fieldset class='form-group'>
+            {{form.name.label}}
+            {{form.name(class='form-control')}}
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="category">Category</label>
+            <select name="category" class="browser-default custom-select" id="categories">
+                {%for category in categories%}
+                    <option value="{{category.name}}">{{category.name}}</option> 
+                {%endfor%}
+            </select>
+        </fieldset>
+        <fieldset class="form-group">
+            {{form.description.label}}
+            {{form.description (class='form-control')}}
+        </fieldset>
+        <fieldset class="form-group">
+            {{form.amount.label}}
+            {{form.amount(class='form-control')}}
+        </fieldset>
+
+
+
+        <button type='submit' class='btn btn-warning' >Add</button>
+    </form>
+    
+{%endblock%}
+</html>

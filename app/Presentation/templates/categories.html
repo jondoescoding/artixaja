@@ -1,0 +1,27 @@
+{%extends 'base.html'%}
+
+{%block main%}
+    <h1>Categories</h1>
+    {%if categories|length%}
+        {%for category in categories%}
+        <div class="categories">
+            <p class="cat_name">{{category.name}}</p>
+            <a href="{{url_for('removeCategory',id=category.id)}}" class="remove">Remove</a>
+        </div>
+            
+        {%endfor%}
+    {%endif%}
+    <form action="{{url_for('addCategory')}}" method="POST">
+        <div class='form-inline'>
+            <label for="categ_name" class='mr-2'>Category Name</label>
+            <input type="text" class="form-control mr-2" name="categ_name" required>
+            <div>
+                <button type="submit" class="btn btn-warning">Add</button>
+            </div>
+            
+        </div>
+        
+        
+    </form>
+{%endblock%}
+</html>

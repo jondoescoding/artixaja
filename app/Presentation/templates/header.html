@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning fixed-top">
+  <a class="navbar-brand" href="#">Artixa Ja</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+      </li>
+      {%if current_user.is_authenticated%}
+        {% if session.get('name')=='admin'%}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('display_inventory') }}">Inventory</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('displayExpenses') }}">Expenses</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('orders') }}">Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('add_fee',feetype='nav') }}">Add Fees</a>
+          </li>
+        {%else%}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('display_catalogue') }}">Catalogue</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('track_order') }}">Track Order</a>
+          </li>
+        {%endif%}
+      {%endif%}
+    </ul>
+
+    <ul class="navbar-nav">
+      {%if current_user.is_authenticated%}
+          {%if session.get('name') != 'admin'%}
+            <li class="nav-item">
+              <a class="nav-link">Welcome {{session.get('name')}}!</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('shoppingcart') }}">
+                <img src="{{url_for('static', filename='cart.png')}}" id="cart-img"> Cart ({{session.get('ShoppingCart')|length}})</a>
+            </li>
+          {%endif%}
+      {%endif%}
+      {%if not current_user.is_authenticated%}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
+      </li>
+      {%endif%}
+      <li class="nav-item">
+        {%if current_user.is_authenticated%}  
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        {%else%}
+          <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        {%endif%}
+        </li>
+    </ul>
+  </div>
+</nav>

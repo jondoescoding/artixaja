@@ -1,0 +1,125 @@
+{%extends 'base.html'%}
+
+{%block main%}
+<div>
+    {%if session['name'] == 'admin'%}
+    <form action="{{url_for('add_fee', feetype='discount')}}" method="POST">
+        {{form.csrf_token}}
+        <fieldset>
+            {{form.discount.label}}
+            {{form.discount}}
+        </fieldset>
+        <fieldset>
+            {{form.amount.label}}
+            {{form.amount}}
+        </fieldset>
+        <button value='discount'>Add Discount</button>
+    </form>
+    {%if discounts|length%}
+    <table>
+        <thead>
+            <tr>
+                <th>Delivery Location</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for data in discounts%}
+            <tr>
+                <td>{{data.name}}</td>
+                <td>{{data.amount}}</td>
+                <td><a href="{{url_for('updateFee',id=data.id)}}" class="update">Update</a><a href="{{url_for('removeFee',id=data.id)}}" class="remove">Remove</a></td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    {%else%}
+    <p>There are no discounts to be displayed.</p>
+    {%endif%}
+</div>
+
+<div>
+    <form action="{{url_for('add_fee',feetype='location')}}" method="POST">
+        {{l_form.csrf_token}}
+        <fieldset>
+            {{l_form.delivery.label}}
+            {{l_form.delivery}}
+        </fieldset>
+        <fieldset>
+            {{l_form.amount.label}}
+            {{l_form.amount}}
+        </fieldset>
+        <button value='delivery'>Add Delivery Fee</button>
+    </form>
+    {%if delivery|length%}
+    <table>
+        <thead>
+            <tr>
+                <th>Delivery Location</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {%for data in delivery%}
+                    <td>{{data.name}}</td>
+                    <td>{{data.amount}}</td>
+                    <td><a href="{{url_for('updateFee',id=data.id)}}" class='update'>Update</a><a href="{{url_for('removeFee',id=data.id)}}" class='remove'>Remove</a></td>
+                {%endfor%}
+            </tr>
+        </tbody>
+    </table>
+    {%else%}
+    <p>There are no Delivery Fees to be displayed.</p>
+    {%endif%}
+</div>
+{%else%}
+<h1>Dicounts</h1>
+{%if discounts|length%}
+    <table>
+        <thead>
+            <tr>
+                <th>Delivery Location</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for data in discounts%}
+            <tr>
+                <td>{{data.name}}</td>
+                <td>{{data.amount}}</td>
+                <td><a href="{{url_for('updateFee',id=data.id)}}" class='update'>Update</a><a href="{{url_for('removeFee',id=data.id)}}" class='remove'>Remove</a></td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    {%else%}
+    <p>There are no discounts to be displayed.</p>
+    {%endif%}
+    <hr/>
+    <h1>Delivery Fees</h1>
+    {%if delivery|length%}
+    <table>
+        <thead>
+            <tr>
+                <th>Delivery Location</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {%for data in delivery%}
+                    <td>{{data.name}}</td>
+                    <td>{{data.amount}}</td>
+                    <td><a href="#">Update</a><a href="#">Remove</a></td>
+                {%endfor%}
+            </tr>
+        </tbody>
+    </table>
+    {%else%}
+    <p>There are no Delivery Fees to be displayed.</p>
+    {%endif%}
+{%endif%}
+{%endblock%}

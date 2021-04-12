@@ -1,0 +1,134 @@
+{%extends 'base.html'%}
+
+{%block main%}
+<div class="shop-checkout">
+  <div class="shop-cart">
+    <h1>Shopping Cart</h1>
+    <p>Review and Modify your cart here</p>
+    {%if cart|length %}
+    <table id="shopping-cart">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Item Name</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Cost</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for item in cart%}
+        <tr>
+          <td><img id="image" src="{{url_for('get_image', filename=item[0].image)}}"></td>
+          <td>{{item[0].name}}</td>
+          <td>
+            <form action="{{url_for('update_quant', itemid=item[0].id)}}" method="POST" class="UpdateQtyForm">
+              Amount: {{item[1]}} 
+              {{form2.csrf_token}}
+              {{form2.update_quantity(class='updateBar', placeholder='New Qty')}}
+              <button class="btn btn-warning updateButton">Update Qnt</button>
+              {#<a href="{{url_for('update_quant', itemid=item[0].id, quantity=0)}}">Update</a>#}
+            </form>
+          </td>
+            
+            
+          <td>${{item[2]}}.00</td>
+          <td><a href="{{url_for('remove_cart', itemid=item[0].id)}}">Remove</a></td>
+        </tr>
+        {%endfor%}
+        <tr>
+          <td>Subtotal</td>
+          <td colspan="4">${{total}}.00</td>
+        </tr>
+      </tbody>
+    </table>
+    {%else%}
+      <hr/>
+      <p>No items in cart</p>
+      <hr/>
+    {%endif%}
+    <br/>
+    <a href="{{url_for('display_catalogue')}}"><input type="submit" class="btn btn-block btn-warning" value="Continue Shopping"></a>
+  </div>
+  <div class="checkout-form">
+    <h1>Checkout</h1>
+    <form action="{{url_for('checkout')}}" method="POST">
+      {{form.csrf_token}}
+      <fieldset class="form-group">
+        {{form.address.label}} <p>(Required if you do not live in Kingston, St.Andrew or St. Catherine)</p>
+        {{form.address(class='form-control', placeholder='Street Address, apartment, suite, floor, etc')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.parish.label}}
+        {{form.parish(class='form-control')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.drop_off.label}}
+        {{form.drop_off(class='form-control')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.discountCode.label}}
+        {{form.discountCode(class='form-control')}}
+      </fieldset>
+      <fieldset class="form-group">
+        {{form.delivery_instructions.label}}
+        {{form.delivery_instructions(class='form-control')}}
+      </fieldset>
+      <a href="{{url_for('add_fee',feetype='nav')}}">See Delivery Costs and Delivery Fees</a>
+      <fieldset class="bank-radio-buttons">
+        {{form.payment_methods.label}}
+        {{form.payment_methods(class='form-check-label radio-buttons')}}
+      </fieldset>
+      <p>All bank payments must be made before orders can be processed</p>
+      <div class="bank-info">
+        <p style="font-weight: 700;">View Bank Information</p>
+        <div class="tab">
+          <input type="button" class="tablinks" onclick="bankDets(event, 'NCB')" value="NCB"></input>
+          <input type="button" class="tablinks" onclick="bankDets(event, 'Scotiabank')" value="Scotiabank"></input>
+        </div>
+
+        <div id="NCB" class="tabcontent">
+          <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+          <br>
+          <p>Account Name: A-jon Josingh</p>
+          <p>Account #: 1234567</p>
+          <p>Branch: UWI 2171</p>
+          <p>Account Type: Education</p>
+        </div>
+
+        <div id="Scotiabank" class="tabcontent">
+          <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+          <br>
+          <p>Account Name: A-jon Josingh</p>
+          <p>Account #: 1234567</p>
+          <p>Branch: UWI COMP 2171</p>
+          <p>Account Type: Education</p> 
+        </div>
+      </div>
+      <br>
+      <button type="submit" class="btn btn-warning">Checkout</button>
+    </form>
+    <br>
+  </div>
+ 
+</div>
+
+<script>
+  function bankDets(evt, bank) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(bank).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+</script>
+  
+{%endblock%}
+</html>
+

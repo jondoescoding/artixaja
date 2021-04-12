@@ -1,0 +1,197 @@
+{%extends 'base.html'%}
+
+{%block main%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<h1>Admin Dashboard</h1>   
+<div class="sales_expenses">
+        <table class="s-e-table">
+            <caption>Sales and Expenses YTD (2021)</caption>
+            <thead>
+                <tr>
+                <th scope="row">Sales</th>
+                <td>{{sales}}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Expenses</th>
+                    <td>{{expenses}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div><canvas id="sales" width="400" height="200"></canvas></div>
+    <br>
+    <div>
+        <table class="sales">
+            <caption>Top 3 Best Performing Months(Sales)</caption>
+            <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {%for item in sales_performance[0]%}
+                  <tr>
+                    <td>{{item[0]}}</td>
+                    <td>{{item[1]}}</td>
+                  </tr>
+                  {%endfor%}
+              </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <table class="sales"> 
+            <caption>Top 3 Least Performing Months (Sales)</caption>
+            <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for item in sales_performance[1]%}
+                <tr>
+                <td>{{item[0]}}</td>
+                <td>{{item[1]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+   <br>
+   <div>
+    <table class="items">
+        <caption>Top 3 Best Performing Items</caption>
+        <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Sales</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in items[0]%}
+            <tr>
+            <td>{{item[0]}}</td>
+            <td>{{item[1]}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+   </div>
+   <br>
+    <div>
+        <table class="items">
+            <caption>Top 3 Least Performing Items</caption>
+            <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for item in items[1]%}
+                <tr>
+                <td>{{item[0]}}</td>
+                <td>{{item[1]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div><canvas id="categories" width="400" height="300"></canvas></div>
+    <br>
+    <div><canvas id="sales-comparison" width="400" height="400"></canvas></div>
+    <script>
+        var ctx = document.getElementById("sales").getContext("2d");
+        var sales = new Chart(ctx,{
+            type:"line",
+            data:{
+                labels: {{labels|safe}},
+                datasets: [
+                {
+                    label:"Expenses",
+                    data: {{values|safe}},
+                    fill: false,
+                    borderColor: "rgb(75,192,192)",
+                    lineTension:0.1
+                },
+                {
+                    label:"Sales",
+                    data: {{values_two|safe}},
+                    fill: false,
+                    borderColor: "rgb(241, 226, 10)",
+                    lineTension:0.1
+                },
+                
+                {
+                    label:"Profit or Loss",
+                    data: {{prof_loss|safe}},
+                    fill: false,
+                    borderColor: "rgb(255, 17, 0)",
+                    lineTension:0.1
+                }
+            ]
+        },
+        options: {
+            responsive:false
+        }   
+    });
+
+
+    var ctx_two = document.getElementById("categories").getContext("2d");
+    var categories = new Chart(ctx_two,{
+        type: "pie",
+        data: {
+            labels: {{cat_labels | safe}},
+            datasets: [
+                {
+                    fill: true,
+                    backgroundColor: {{color|safe}},
+                    data: {{cat_values|safe}}
+                }
+            ]
+        },
+        options: {
+            title: {
+                  display: true,
+                  text: 'Categories',
+                  position: 'top'
+              },
+        rotation: -0.7 * Math.PI,
+        responsive:false
+        }
+    });
+
+    var ctx_three = document.getElementById("sales-comparison").getContext("2d");
+    var sales_comparison = new Chart(ctx_three,{
+        type:'bar',
+        data: {
+            labels: {{stat_labels|safe}},
+            datasets: [
+                {
+                    label:"Sales",
+                    data: {{stat_values|safe}},
+                    fill: true,
+                    borderColor:['#B0FC38','#E3242B','#FEC205','#AF69EF','#FE7F9C','#EF820D'],
+                    backgroundColor: ['#B0FC38','#E3242B','#FEC205','#AF69EF','#FE7F9C','#EF820D']
+                }
+            ]
+        },
+        options: {
+            title: {
+                  display: true,
+                  text: 'Categories',
+                  position: 'top'
+              },
+              responsive:false
+        }
+    });
+    </script>
+
+{%endblock%}
+</html>

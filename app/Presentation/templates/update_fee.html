@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+
+{%block main%}
+    <form action="{{url_for('updateFee',id=fee.id)}}" method="POST">
+        {{form.csrf_token}}
+        <fieldset>
+            <p>Fee</p>
+            {{form.discount}}
+        </fieldset>
+        <fieldset>
+            {{form.amount.label}}
+            {{form.amount}}
+        </fieldset>
+        <button value='discount'>Update Fee</button>
+    </form>
+{%endblock%}
+</html>
