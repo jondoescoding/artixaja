@@ -7,7 +7,7 @@ import random
 
 
 class Dashboard:
-'''Generates the Tables and Graphs for the Expenses, Sales and Performance'''
+    '''Generates the Tables and Graphs for the Expenses, Sales and Performance'''
 
     #Calculates the Expenses for a specific year
     def calculate_expenses(self):

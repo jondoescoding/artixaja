@@ -43,8 +43,8 @@ class Shoppingcart():
     #Checks the stock level of the item against the quantity entered by user
     def checkQuantity(self,id, selected_quant):
         if int(self.get_item(id).stocklevel) < int(selected_quant):
-            return False """Quantity chosen exceeds stock level"""
-        return True """Quantity chosen is sufficient"""
+            return False #Quantity chosen exceeds stock level
+        return True #Quantity chosen is sufficient
 
     #Displays the items in the shopping cart and returns the items, quanity, cost per unit price and subtotal
     def display_cart(self):

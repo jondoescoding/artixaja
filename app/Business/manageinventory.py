@@ -48,12 +48,13 @@ class ManageInventory:
     def removeImage(self,image):
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'],image))
 
+    #gets an item by name
     def getItem(self,name):
         return db.session.query(Inventory).filter(Inventory.name == name).first()
 
 
 class ManageFee:
-"""manages the Discount and Delivery Fees"""
+    """manages the Discount and Delivery Fees"""
 
     #This function adds a fee of a specific type along with its relevant information
     #The fee type can either be dicount our delivery
