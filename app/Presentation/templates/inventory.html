@@ -22,7 +22,7 @@
       <td><img id="image" src="{{url_for('get_image', filename=item.image)}}"></td>
       <td>{{item.name}}</td>
       <td>{{item.description}}</td>
-      <td>${{item.cost}}.00</td>
+      <td>{{"${:,.2f}".format(item.cost)}}</td>
       <td>{{item.stocklevel}}
         {%if item.stocklevel <= 10 %}
         <p class="lowstock">Stock levels are low</p>

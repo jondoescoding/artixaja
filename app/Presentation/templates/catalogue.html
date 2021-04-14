@@ -6,7 +6,7 @@
         <img src="{{url_for('get_image', filename=item.image)}}" alt={{item.name}} class="catalogue-image">
         <div id= "words">
             <p class="item-name">{{item.name}}</p>
-            <p id="price">${{item.cost}}.00</p>
+            <p id="price">{{"${:,.2f}".format(item.cost)}}</p>
             <p>{{item.description}}</p>
             {%if item.stocklevel>0%}
             <form action="{{url_for('add_to_cart', itemid=item.id)}}" method="POST">

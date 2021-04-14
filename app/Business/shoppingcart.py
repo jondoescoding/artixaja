@@ -1,29 +1,52 @@
 from flask import session, redirect, url_for, flash
 from app import app,db
 from app.Database.models import Inventory,User
+from app.Business.manageinventory import ManageInventory, ManageFee
 from random import randint
+fees = ManageFee()
 
 class Shoppingcart():
-    
+
+    #Adds an item to the shooping cart
     def add_to_cart(self, id, quantity):
-        if 'ShoppingCart' not in session:
+        #Checks to see if the shopping cart session variable exists
+        if 'ShoppingCart' not in session: 
             session['ShoppingCart'] = []
         else:
             notFound= True
-            for i in session['ShoppingCart']:
+            #Checks if the item to be added is already in the cart
+            for i in session['ShoppingCart']: 
                 if i[0] == id:
-                    self.update_quantity(id,quantity)
+                    #Quantity of item is updated to the quantity chosen
+                    self.update_quantity(id,quantity) 
                     notFound= False
                     break
-            if notFound == True:
+            if notFound == True: 
+                #The item is not found in the cart and is therefore added to the cart
                 cart_item = [id, quantity]
                 session['ShoppingCart'].append(cart_item)
 
+    #Updates the quantity of an item to the value input by user
     def update_quantity(self,id, quantity):
-        for i in session['ShoppingCart']:
-            if i[0] == id:
-                i[1] = quantity
+        try:
+            if self.checkQuantity(id,quantity):
+                for i in session['ShoppingCart']:
+                    if i[0] == id:
+                        i[1] = quantity
+                        return True
+            #Quantity chosen is greater than the quantity of items in the inventory
+            return "Quantity Selected is too large"
+        #A non-zero value was entered for the quantity
+        except ValueError:
+            return "Quantity Must be an Integer"
+    
+    #Checks the stock level of the item against the quantity entered by user
+    def checkQuantity(self,id, selected_quant):
+        if int(self.get_item(id).stocklevel) < int(selected_quant):
+            return False """Quantity chosen exceeds stock level"""
+        return True """Quantity chosen is sufficient"""
 
+    #Displays the items in the shopping cart and returns the items, quanity, cost per unit price and subtotal
     def display_cart(self):
         if 'ShoppingCart' not in session:
             return False
@@ -38,23 +61,31 @@ class Shoppingcart():
                 cart.append(cart_item)
             return cart,total
 
+    #Displays the user order on the Administration Side
+    #Related to View Order Use Case
     def display_user_cart(self, cart):
         user_cart = []
         for i in cart:
-            item = self.get_item(i[0]).name
-            cart_item = [item, i[1]]
+            if self.get_item(i[0]) is not None:
+                item = self.get_item(i[0]).name
+                cart_item = [item, i[1]]
+            else:
+                item = "Item Removed"
+                cart_item=[item,'Not Available']
             user_cart.append(cart_item)
         return user_cart
 
-
+    #Gets an item object from the inventory table in the artixa database
     def get_item(self,id):
         return db.session.query(Inventory).filter(Inventory.id == id).first()
 
+    #removes an item from the shoppingcart session variable
     def remove_from_cart(self,id):
         for i,v in enumerate(session['ShoppingCart']):
             if v[0] == id:
                 session['ShoppingCart'].pop(i)
 
+    #Calculates the GCT, discount Price and Total
     def checkout(self, discount):
         disc_price = discount * int(session['total'])
         gct = 0.15 * int(session['total'])
@@ -62,34 +93,27 @@ class Shoppingcart():
         self.updateStocklevel()
         return gct, disc_price, total
 
+    #Updates the Stock level in the inventory once an order goes through
     def updateStocklevel(self):
         for x in session['ShoppingCart']:
             item = self.get_item(x[0])
             item.stocklevel -= int(x[1])
             db.session.commit()
 
+    #Validates the Discount code to see if it is among the list of discount codes offered
     def validateDiscountCode(self,discountCode):
-        discCodes = [["DB7ECQT",0.25], ["E1T4DAH",0.5],["RDWGJ1W",0.1]]
+        discCodes,ignore = fees.getFees()
         for x in discCodes:
-            if discountCode == x[0]:
-                return x[1]
+            if discountCode == x.name:
+                return x.amount
         return False
 
-    def getName(self):
-        f_name = session['name']
-        name = db.session.query(User).filter(User.first_name == f_name).first()
-        return [name.first_name, name.last_name]
-
-
+    #Gets the DeliveryTime and Fee Amount based on the Delivery Location
     def deliveryInfo(self,drop_off):
-        delivery_fee = [['Half Way Tree',400],['UWI/UTech',0],['Portmore',200],['Spanish Town', 300],['Hanover',1200],['Saint Elizabeth',800],['Saint James',900],['Trelawny',800],['Westmoreland',1500],['Clarendon', 600],['Manchester',800],['Saint Ann',900],['Saint Mary',2000],['Portland',1800],['Saint Thomas', 1300]]
+        fee = fees.get_fee_by_name(drop_off)
+        return fee.amount, fee.deliveryTime
 
-        message=[['Half Way Tree',1],['UWI/UTech',1],['Portmore',1],['Spanish Town',1],['Hanover',2],['Saint Elizabeth',2],['Saint James',2],['Trelawny',2],['Westmoreland',2],['Clarendon', 1],['Manchester',2],['Saint Ann',2],['Saint Mary',2],['Portland',2],['Saint Thomas', 2]]
-
-        fee = [x[1] for x in delivery_fee if drop_off == x[0]]
-        deliv_message = [x[1] for x in message if drop_off == x[0]]
-        return fee[0], deliv_message[0]
-
+    #Generates a random 8 digit tracking Number for the user to track their order
     def trackingNumber(self):
         n=8
         range_start = 10**(n-1)

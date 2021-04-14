@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 
+"""Configuration class for Flask Framework"""
+
 class Config(object):
     """Base Config Object"""
     DEBUG = False

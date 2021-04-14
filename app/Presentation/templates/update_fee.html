@@ -1,17 +1,27 @@
 {%extends 'base.html'%}
 
 {%block main%}
+    <h1>Update Fee</h1>
     <form action="{{url_for('updateFee',id=fee.id)}}" method="POST">
         {{form.csrf_token}}
-        <fieldset>
-            <p>Fee</p>
-            {{form.discount}}
+        <fieldset class="form-group">
+            <label for='discount'>Fee</label>
+            {{form.discount(class='form-control')}}
         </fieldset>
-        <fieldset>
+        <fieldset class='form-group'>
             {{form.amount.label}}
-            {{form.amount}}
+            {{form.amount(class='form-control')}}
         </fieldset>
-        <button value='discount'>Update Fee</button>
+        {%if fee.fee_type == 'delivery'%}
+            <fieldset>
+                <label for='deliveryTime'>Delivery Time</label>
+                <select name='deliveryTime' class="browser-default custom-select">
+                    <option value='1' {%if fee.deliveryTime == 1 %} selected {%endif%}>2 - 3 Days</option>
+                    <option value='2' {%if fee.deliveryTime == 2 %} selected {%endif%}>3 - 5 Days</option>
+                </select>
+            </fieldset>
+        {%endif%}
+        <button value='discount' style='background-color: var(--warning);'>Update Fee</button>
     </form>
 {%endblock%}
 </html>

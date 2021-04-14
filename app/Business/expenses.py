@@ -1,7 +1,8 @@
 from app import db,app
 from app.Database.models import Expenses, ExpenseCategories
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
-class ManageExpenses():
+class ManageExpenses:
     
     #Adds an expense to the Expenses table
     def addExpense(self, date, name, description, category, amount):
@@ -35,9 +36,15 @@ class ManageExpenses():
     
     #A category is added based on user input and is reflected in the ExpensesCategory Table in the Artixa database
     def addCategory(self, name):
-        category = ExpenseCategories(name)
-        db.session.add(category)
-        db.session.commit()
+        try:
+            category = ExpenseCategories(name)
+            db.session.add(category)
+            db.session.commit()
+            return 'Category has been added'
+        except IntegrityError:
+            db.session.rollback()
+            return "Category already Exists"
+
 
     #Displays all Categories in the ExpenseCategories Table in the Artixaja Database
     def displayCategories(self):

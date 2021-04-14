@@ -403,30 +403,69 @@ table{
 }
 
 caption{
+    border-top-left-radius:5px ;
+    border-top-right-radius: 5px;
     caption-side: top;
     color: black;
     font-weight: bolder;
-    /* text-align: center; */
+    background-color: rgb(216, 214, 214);
+    text-align: center;
 }
 
-/* .s-e-table{
-    text-align: center;
-} */
+.dashboard{
+    display:grid;
+    grid-template-areas: 
+    'sales sales sales expenses expenses expenses'
+    'sales-canvas sales-canvas sales-canvas sales-canvas sales-canvas sales-canvas'
+    'top-sales top-sales top-sales least-sales least-sales least-sales'
+    'top-items top-items top-items least-items least-items least-items'
+    'cat-bar cat-bar cat-bar comp-sales comp-sales comp-sales';
+    grid-gap: 30px;
+    grid-row-gap: 50px;   
+}
 
-/* .sales_expenses{
-    overflow: hidden;
-    border-radius: 10px;
-    background-color: white;
-    border: 1px solid rgba(240, 240, 148, 0.788);
-    box-shadow: #888888;
-    width: 50%;
-} */
+.sales{grid-area: sales;}
+.expenses{grid-area:expenses;}
+.sales-canvas{grid-area:sales-canvas;}
+.top-sales{grid-area:top-sales;}
+.least-sales{grid-area:least-sales;}
+.top-items{grid-area: top-items;}
+.least-items{grid-area:least-items;}
+.cat-bar{grid-area: cat-bar;}
+.comp-sales{grid-area:comp-sales;}
 
-/* .sales_expenses table{
-    align-items: center;
-    justify-content: center;
+.dashboard table{
+    background-color: rgb(243, 243, 243);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius:5px;
+}
 
-} */
+.dashboard table th,.dashboard table td{
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.sales, .expenses{
+    color: white;
+    /* -webkit-text-stroke: 1px rgba(105, 103, 103, 0.788); */
+    font-size: 30px;
+    border-radius: 5px;
+    padding: 10px;
+    height: 180px;
+    line-height: 150%;
+}
+
+.sales{
+    background: linear-gradient(45deg, rgb(162, 247, 5), rgb(221, 250, 167),rgb(162, 247, 5));
+}
+
+.expenses{
+    background: linear-gradient(45deg, rgb(245, 156, 156), rgb(248, 221, 221),rgb(233, 164, 164));
+}
+
+.money{
+    font-size: 60px;
+}
 
 button{
     white-space: normal;
@@ -460,4 +499,32 @@ button{
 
 .cat_name{
     width: 150px;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-areas: 
+    'order-num order-num order-num order-num order-num order-num'
+    'gen_info gen_info gen_info gen_info gen_info gen_info'
+    'cust_det cust_det cust_det payment_stat payment_stat payment_stat'
+    'cart-item cart-item cart-item cart-item cart-item cart-item';
+    grid-gap: 15px;
+}
+.order-num{grid-area: order-num;}
+.gen_info{grid-area: gen_info;}
+.cust_det{grid-area: cust_det;}
+.payment_stat{grid-area: payment_stat;}
+.cart-item{grid-area: cart-item;}
+
+.grey-outline{
+    border: 2px solid rgb(248, 248, 192);
+}
+
+.grey-outline h3{
+    background-color: rgb(248, 248, 192);
+    padding: 10px;
+}
+
+.order_info{
+    padding: 10px;
 }

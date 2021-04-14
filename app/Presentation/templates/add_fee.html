@@ -3,32 +3,36 @@
 {%block main%}
 <div>
     {%if session['name'] == 'admin'%}
+    <h1>Add Discount Code</h1>
     <form action="{{url_for('add_fee', feetype='discount')}}" method="POST">
         {{form.csrf_token}}
-        <fieldset>
+        <fieldset class="form-group">
             {{form.discount.label}}
-            {{form.discount}}
+            {{form.discount(class='form-control')}}
         </fieldset>
-        <fieldset>
+        <fieldset class="form-group">
             {{form.amount.label}}
-            {{form.amount}}
+            {{form.amount(class='form-control', placeholder='Format x.xx')}}
         </fieldset>
-        <button value='discount'>Add Discount</button>
+        <button value='discount' class='btn btn-warning btn-block'>Add Discount</button>
     </form>
+    <br>
     {%if discounts|length%}
-    <table>
+    <h3 style='text-align: center;'>Discount Codes</h3>
+    <table id="shopping-cart">
         <thead>
             <tr>
-                <th>Delivery Location</th>
-                <th>Amount</th>
+                <th>Discount Code</th>
+                <th colspan="2">Amount</th>
             </tr>
         </thead>
         <tbody>
             {%for data in discounts%}
             <tr>
                 <td>{{data.name}}</td>
-                <td>{{data.amount}}</td>
-                <td><a href="{{url_for('updateFee',id=data.id)}}" class="update">Update</a><a href="{{url_for('removeFee',id=data.id)}}" class="remove">Remove</a></td>
+                <td>{{data.amount|float * 100}}%</td>
+                <td><a href="{{url_for('updateFee',id=data.id)}}" class="update">Update</a>
+                    <a href="{{url_for('removeFee',id=data.id)}}" class="remove">Remove</a></td>
             </tr>
             {%endfor%}
         </tbody>
@@ -37,37 +41,52 @@
     <p>There are no discounts to be displayed.</p>
     {%endif%}
 </div>
-
+<hr>
 <div>
+    <h1>Add a Delivery Fee</h1>
     <form action="{{url_for('add_fee',feetype='location')}}" method="POST">
         {{l_form.csrf_token}}
-        <fieldset>
+        <fieldset class='form-group'>
             {{l_form.delivery.label}}
-            {{l_form.delivery}}
+            {{l_form.delivery(class='form-control')}}
         </fieldset>
-        <fieldset>
+        <fieldset class='form-group'>
             {{l_form.amount.label}}
-            {{l_form.amount}}
+            {{l_form.amount(class='form-control')}}
         </fieldset>
-        <button value='delivery'>Add Delivery Fee</button>
+        <fieldset class='form-group'>
+            <label for="deliveryTime">Delivery Times</label>
+            <select name='deliveryTime' class="browser-default custom-select">
+                <option value='1'>2 - 3 Days</option>
+                <option value='2'>3 - 5 Days</option>
+            </select>
+        </fieldset>
+        <button value='delivery' class='btn btn-warning btn-block'>Add Delivery Fee</button>
     </form>
+    <br>
     {%if delivery|length%}
-    <table>
+    <h3 style='text-align: center;'>Delivery Fees</h3>
+    <table id="shopping-cart">
         <thead>
             <tr>
                 <th>Delivery Location</th>
                 <th>Amount</th>
+                <th>Delivery Time</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            
                 {%for data in delivery%}
+                <tr>
                     <td>{{data.name}}</td>
-                    <td>{{data.amount}}</td>
-                    <td><a href="{{url_for('updateFee',id=data.id)}}" class='update'>Update</a><a href="{{url_for('removeFee',id=data.id)}}" class='remove'>Remove</a></td>
+                    <td>{{"${:,.2f}".format(data.amount)}}</td>
+                    <td>{%if data.deliveryTime==1%}2-3 Days{%else%} 3-5 Days{%endif%}</td>
+                    <td><a href="{{url_for('updateFee',id=data.id)}}" class='update'>Update</a>
+                        <a href="{{url_for('removeFee',id=data.id)}}" class='remove'>Remove</a></td>
+                </tr>
                 {%endfor%}
-            </tr>
+            
         </tbody>
     </table>
     {%else%}
@@ -77,19 +96,18 @@
 {%else%}
 <h1>Dicounts</h1>
 {%if discounts|length%}
-    <table>
+    <table id="shopping-cart">
         <thead>
             <tr>
-                <th>Delivery Location</th>
-                <th>Amount</th>
+                <th>Discount Code</th>
+                <th colspan="2">Amount</th>
             </tr>
         </thead>
         <tbody>
             {%for data in discounts%}
             <tr>
                 <td>{{data.name}}</td>
-                <td>{{data.amount}}</td>
-                <td><a href="{{url_for('updateFee',id=data.id)}}" class='update'>Update</a><a href="{{url_for('removeFee',id=data.id)}}" class='remove'>Remove</a></td>
+                <td>{{data.amount|float * 100}}</td>
             </tr>
             {%endfor%}
         </tbody>
@@ -100,7 +118,7 @@
     <hr/>
     <h1>Delivery Fees</h1>
     {%if delivery|length%}
-    <table>
+    <table id="shopping-cart">
         <thead>
             <tr>
                 <th>Delivery Location</th>
@@ -109,13 +127,12 @@
             </tr>
         </thead>
         <tbody>
+            {%for data in delivery%}
             <tr>
-                {%for data in delivery%}
-                    <td>{{data.name}}</td>
-                    <td>{{data.amount}}</td>
-                    <td><a href="#">Update</a><a href="#">Remove</a></td>
-                {%endfor%}
+                <td>{{data.name}}</td>
+                <td>{{"${:,.2f}".format(data.amount)}}</td>       
             </tr>
+            {%endfor%}
         </tbody>
     </table>
     {%else%}

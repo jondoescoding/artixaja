@@ -53,7 +53,7 @@ class Order():
         return False, False
 
     #Generates the maximum possible predicted delivery date of an order
-    # dependent on delivery location 
+    #dependent on delivery location 
     def predict_delivery_date(self,message):
         if message == 1:
             date = datetime.now()+timedelta(days=3)

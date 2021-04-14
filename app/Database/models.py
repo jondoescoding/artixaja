@@ -3,11 +3,10 @@ from werkzeug.security import generate_password_hash
 from app.Business.order_status import OrderStatus, PaymentStatus
 from datetime import datetime
 
+"""This file contains all the tables used to form the database"""
+
 class User(db.Model):
-    # You can use this to change the table name. The default convention is to use
-    # the class name. In this case a class name of UserProfile would create a
-    # user_profile (singular) table, but if we specify __tablename__ we can change it
-    # to `user_profiles` (plural) or some other name.
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -52,7 +51,7 @@ class Inventory(db.Model):
     image=db.Column(db.String(80),unique=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
-    cost = db.Column(db.Integer)
+    cost = db.Column(db.Float)
     stocklevel = db.Column(db.Integer)
 
     def __init__(self,image, name, description, cost, stocklevel):
@@ -138,9 +137,11 @@ class Fees(db.Model):
     fee_type = db.Column(db.String)
     name = db.Column(db.String,unique=True)
     amount = db.Column(db.Float)
+    deliveryTime = db.Column(db.Integer)
 
-    def __init__(self,fee_type,name,amount):
+    def __init__(self,fee_type,name,amount,deliveryTime):
         self.fee_type = fee_type
         self.name = name
         self.amount = amount
+        self.deliveryTime = deliveryTime
       

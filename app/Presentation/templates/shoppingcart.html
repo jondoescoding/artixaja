@@ -32,13 +32,13 @@
           </td>
             
             
-          <td>${{item[2]}}.00</td>
+          <td>{{"${:,.2f}".format(item[2])}}</td>
           <td><a href="{{url_for('remove_cart', itemid=item[0].id)}}">Remove</a></td>
         </tr>
         {%endfor%}
         <tr>
           <td>Subtotal</td>
-          <td colspan="4">${{total}}.00</td>
+          <td colspan="4">{{"${:,.2f}".format(total)}}</td>
         </tr>
       </tbody>
     </table>
@@ -63,8 +63,13 @@
         {{form.parish(class='form-control')}}
       </fieldset>
       <fieldset class="form-group">
-        {{form.drop_off.label}}
-        {{form.drop_off(class='form-control')}}
+        {#{{form.drop_off.label}}
+        {{form.drop_off(class='form-control')}}#}
+        <select name="drop_off" class="browser-default custom-select" id="categories">
+          {%for location in drop_off%}
+              <option value="{{location.name}}">{{location.name}}</option> 
+          {%endfor%}
+        </select>
       </fieldset>
       <fieldset class="form-group">
         {{form.discountCode.label}}
@@ -74,7 +79,7 @@
         {{form.delivery_instructions.label}}
         {{form.delivery_instructions(class='form-control')}}
       </fieldset>
-      <a href="{{url_for('add_fee',feetype='nav')}}">See Delivery Costs and Delivery Fees</a>
+      <a href="{{url_for('add_fee',feetype='nav')}}">See Delivery Costs and Discounts</a>
       <fieldset class="bank-radio-buttons">
         {{form.payment_methods.label}}
         {{form.payment_methods(class='form-check-label radio-buttons')}}
