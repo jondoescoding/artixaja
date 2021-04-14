@@ -65,6 +65,7 @@
       <fieldset class="form-group">
         {#{{form.drop_off.label}}
         {{form.drop_off(class='form-control')}}#}
+        <label for='drop_off'>Drop Off Location:</label>
         <select name="drop_off" class="browser-default custom-select" id="categories">
           {%for location in drop_off%}
               <option value="{{location.name}}">{{location.name}}</option> 
